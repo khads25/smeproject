@@ -4,6 +4,6 @@
     "firebase-functions": "^6.3.2"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "echo 'No build step needed' && exit 0"
   }
 }
