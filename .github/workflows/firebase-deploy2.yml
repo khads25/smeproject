@@ -1,0 +1,37 @@
+name: Firebase Deploy
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want to deploy from, like 'master'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # or the version you're using
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd firebase-functions
+          npm install
+
+      - name: Set up Google Cloud credentials
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-application-credentials.json
+
+      - name: Deploy to Firebase
+        run: |
+          firebase use --add
+          firebase deploy --only functions,hosting
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-application-credentials.json
+
+      - name: Clean up
+        run: rm -f $HOME/google-application-credentials.json
