@@ -23,8 +23,11 @@ jobs:
           cd firebase-functions
           npm install
 
-      - name: Set up Google Cloud credentials
+      - name: Authenticate to Google Cloud
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-application-credentials.json
+
+      - name: Set up Google Cloud credentials
+        run: gcloud auth activate-service-account --key-file=$HOME/google-application-credentials.json
 
       - name: Deploy to Firebase
         run: |
